@@ -32,17 +32,17 @@
 290 GOTO 350
 300 REM ---( INVENTAIRE )---
 310 CLS : FOR I = 1 TO 3
-315 IF (OB(I)=1) THEN PRINT "-"; OB$(I)
-320 NEXT I : PRINT "Espace pour suite..."
-322 K = STRIG(0) : IF K=0 THEN GOTO 322
+315 IF (OB(I)=1) THEN PRINT "-"; OB$(I) : BEEP 12, 2
+320 NEXT I : PRINT "N pour suite...";
+322 C$ = INKEY$ : IF C$<>"N" THEN GOTO 322
 325 CLS : FOR I = 4 TO 6
-326 IF (OB(I)=1) THEN PRINT "-"; OB$(I)
-327 NEXT I : PRINT "Espace pour suite"
-328 K = STRIG(0) : IF K=0 THEN GOTO 328
+326 IF (OB(I)=1) THEN PRINT "-"; OB$(I) : BEEP 12, 2
+327 NEXT I : PRINT "N pour suite";
+328 C$ = INKEY$ : IF C$<>"N" THEN GOTO 328
 329 CLS : FOR I = 7 TO 9
-330 IF (OB(I)=1) THEN PRINT "-"; OB$(I)
-335 NEXT I : PRINT "Espace pour quitter"
-338 K = STRIG(0) : IF K=0 THEN GOTO 338
+330 IF (OB(I)=1) THEN PRINT "-"; OB$(I) : BEEP 12, 2
+335 NEXT I : PRINT "Q pour quitter";
+338 C$ = INKEY$ : IF C$<>"Q" THEN GOTO 338
 340 RETURN
 350 REM --( Deplacement --)
 351 CLS : PRINT "P.V"; PV
@@ -119,7 +119,7 @@
 1090 LOCATE 9,2 : PRINT N$(T)
 1100 LOCATE 9,3 : PRINT CHR$(140);CHR$(141);
 1110 LOCATE 0,0 : PRINT "T(roc) ou (I)nfo";
-1120 INPUT ""; R$
+1120 R$ = INKEY$ : IF R$="" THEN 1120
 1130 IF R$="T" THEN GOTO 1390
 1140 IF R$="I" THEN GOTO 1170
 1150 CLS : PRINT "Au revoir, bonne route !";
@@ -151,11 +151,11 @@
 1430 PR = INT(PX(I)+Z) : M% = 0 : LOCATE 0,0
 1440 IF VA=1 THEN M% = 1 : PRINT "Je vends ";
 1450 IF VA=2 THEN M% =-1 : PRINT "J achete ";
-1460 PRINT OB$(I);  " a "; PR; " direms (o/n)";
-1470 INPUT ""; R$
+1460 PRINT OB$(I);  " a "; PR; " direms (O/N)";
+1470 R$ = INKEY$ : IF R$="" THEN 1470
 1480 IF M%=1 AND AR<PR THEN PRINT "DESOLE !" : GOTO 1380
 1490 IF M%=-1 AND OB(I)=0 THEN PRINT "Ah, aucun ? Salut !" : GOTO 1380
-1500 IF LEFT$(R$,1) <> "O" THEN PRINT "Dommage ! Salut." : GOTO 1380
+1500 IF R$ <> "O" THEN PRINT "Dommage ! Salut." : GOTO 1380
 1510 IF M%=1 THEN OB(I) = 1
 1520 IF M%=-1 THEN OB(I) = 0
 1530 AR = AR + (PR*(-M%))
@@ -170,7 +170,7 @@
 1620 LOCATE 0,0 : PRINT "Fusils ? ";
 1630 PF=INT(RND(1)*70)+(15*T)
 1640 PRINT PF; " direms ";
-1650 INPUT "";R$
+1650 R$ = INKEY$ : IF R$="" THEN 1650
 1660 IF OB(1) = 0 THEN PRINT "Tant pis !" : GOTO 1380
 1670 IF OB(1)=1 AND R$="O" THEN AR=AR+PF : OB(1)=0 : GOTO 1380
 1680 PRINT "Dommage" : GOTO 1380
@@ -178,11 +178,13 @@
 1700 LOCATE 9,3 : PRINT CHR$(142);CHR$(143); : LOCATE 0,0
 1710 IF OB(1)=1 THEN PRINT "Armes confisquees !"; : OB(1)=0 : GOTO 1380
 1720 PRINT "Pas d'armes ? Circulez !" : GOTO 1380
-1730 CLS : PRINT A$(2); " < SAMARCANTE > "; A$(2)
-1740 PRINT CHR$(142);CHR$(143); : BEEP 0, 20
+1730 CLS : PRINT A$(2);        " < SAMARCANTE > "; A$(2)
+1740 PRINT CHR$(142);CHR$(143);
 1750 IF AR >= 200 THEN GOTO 1850
-1760 PRINT "Pas d'argent ! " : BEEP 0, 20
-1770 PRINT "   PARTEZ    ! " : BEEP 0, 20 : GOTO 351
+1760 PRINT "Pas d'argent ! "; CHR$(142);CHR$(143); 
+1770 PRINT "   PARTEZ    ! " 
+1780 K$ = INKEY$ : IF K$ = "" THEN 1780
+1785 GOTO 351
 1850 PRINT "   ENTREZ !    ";CHR$(142);CHR$(143)
 1860 PRINT "Bravo ! Suite dans Nordal"
 1865 FOR I = 1 TO 24 : BEEP I, 1 : NEXT I
@@ -216,14 +218,9 @@
 1960 CLS : PRINT " ";CHR$(134);CHR$(135);" SAMARCANTE ";CHR$(136);CHR$(137)
 1965 PRINT " "; CHR$(140);CHR$(141);      "    2025    ";CHR$(142);CHR$(143)
 1966 PRINT "Jeux et Strategie 86";
-1968 RESTORE 1984
-1969 FOR I = 1 TO 11
-1970 READ DU%, HA%
-1971 BEEP HA%, DU% : NEXT I
 1972 LOCATE 0, 3 : PRINT "Espace -> commencer";
 1975 K = STRIG(0) : IF K=0 THEN GOTO 1975
 1980 GOTO 20
-1984 DATA 10, 6, 10, 3, 20, 6, 40, 3, 7, 6, 7, 8, 7, 6, 10, 5, 10, 3, 20, 6, 40, 3
 1985 REM --( MORT )--
 1986 CLS : PRINT "Vous etes mort"
 1988 RESTORE 1995 : FOR I = 1 TO 11
